@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('health_care_index_by_countries', {
+    await queryInterface.createTable('Crime_index_by_countries', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -11,11 +11,11 @@ module.exports = {
       country: {
         type: Sequelize.STRING
       },
-      health_care_index: {
-        type: Sequelize.INTEGER
+      crime_index: {
+        type: Sequelize.STRING
       },
-      health_care_Exp_index: {
-        type: Sequelize.INTEGER
+      safety_index: {
+        type: Sequelize.STRING
       },
       created_at: {
         allowNull: false,
@@ -28,6 +28,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('health_care_index_by_countries');
+    await queryInterface.dropTable('Crime_index_by_countries');
   }
 };

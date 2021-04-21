@@ -1,39 +1,36 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('population_density_by_countries', {
+    await queryInterface.createTable('properties_price_index_by_2020_countries', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      rank: {
-        type: Sequelize.INTEGER
-      },
       country: {
         type: Sequelize.STRING
       },
-      Aria_km2: {
+      price_to_income_ratio: {
         type: Sequelize.INTEGER
       },
-      Aria_mi2: {
+      gross_rental_yield_city_centre: {
         type: Sequelize.INTEGER
       },
-      population: {
-        type: Sequelize.STRING
+      gross_rental_yield_outside_of_centre: {
+        type: Sequelize.INTEGER
       },
-      density_pop_km2: {
-        type: Sequelize.STRING
+      price_to_rent_ratio_city_centre: {
+        type: Sequelize.INTEGER
       },
-      density_pop_mi2: {
-        type: Sequelize.STRING
+      price_to_rent_ratio_outside_of_city_centre: {
+        type: Sequelize.INTEGER
       },
-      date: {
-        type: Sequelize.STRING
+      mortgage_as_a_percentage_of_income: {
+        type: Sequelize.INTEGER
       },
-      population_source: {
-        type: Sequelize.STRING
+      affordability_index: {
+        type: Sequelize.INTEGER
       },
       created_at: {
         allowNull: false,
@@ -46,6 +43,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('population_density_by_countries');
+    await queryInterface.dropTable('properties_price_index_by_2020_countries');
   }
 };

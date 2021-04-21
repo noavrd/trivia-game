@@ -15,7 +15,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       coastline: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       net_migration: {
         type: Sequelize.STRING
@@ -23,8 +23,8 @@ module.exports = {
       infant_motality: {
         type: Sequelize.STRING
       },
-      GDP: {
-        type: Sequelize.INTEGER
+      gdp: {
+        type: Sequelize.STRING
       },
       literacy: {
         type: Sequelize.STRING
@@ -42,7 +42,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       climate: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       birthrate: {
         type: Sequelize.STRING
@@ -53,7 +53,7 @@ module.exports = {
       agriculture: {
         type: Sequelize.STRING
       },
-      industy: {
+      industry: {
         type: Sequelize.STRING
       },
       service: {

@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Crime_index_by_countries extends Model {
+  class Crime_index_by_country extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,14 +13,14 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  Crime_index_by_countries.init({
+  Crime_index_by_country.init({
     country: DataTypes.STRING,
     crime_index: DataTypes.STRING,
     safety_index: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'Crime_index_by_countries',
+    modelName: 'Crime_index_by_country',
     underscored: true,
   });
-  return Crime_index_by_countries;
+  return Crime_index_by_country;
 };

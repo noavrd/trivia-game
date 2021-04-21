@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Coutries_age_structure extends Model {
     /**
@@ -12,16 +10,20 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
-  };
-  Coutries_age_structure.init({
-    country: DataTypes.STRING,
-    age_0_to_14_years: DataTypes.STRING,
-    age_15_to_64_years: DataTypes.STRING,
-    age_above_65_years: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'Coutries_age_structure',
-    underscored: true,
-  });
+  }
+  Coutries_age_structure.init(
+    {
+      country: DataTypes.STRING,
+      age_0_to_14_years: DataTypes.STRING,
+      age_15_to_64_years: DataTypes.STRING,
+      age_above_65_years: DataTypes.STRING,
+    },
+    {
+      sequelize,
+      modelName: 'Coutries_age_structure',
+      tableName: 'Coutries_age_structures',
+      underscored: true,
+    }
+  );
   return Coutries_age_structure;
 };

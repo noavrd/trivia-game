@@ -26,7 +26,7 @@ module.exports = {
       cost_of_living_index: {
         type: Sequelize.INTEGER
       },
-      property_price_to_income_rario: {
+      property_price_to_income_ratio: {
         type: Sequelize.INTEGER
       },
       traffic_commute_time_index: {
