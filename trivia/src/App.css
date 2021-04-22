@@ -10,6 +10,8 @@ body {
   font-family: 'Sansita Swashed', cursive;
   font-size: 9vh; 
   padding-top: 22vh;
+  animation-name: startheadline;
+  animation-duration: 1s;
 }
 .generalHeadline {
   font-family: 'Sansita Swashed', cursive;
@@ -18,13 +20,17 @@ body {
   animation-duration: 1s;
 }
 
+@keyframes startheadline {
+  0% {padding-top: 0vh;}
+  100% {padding-top: 22vh;}
+}
 @keyframes headline {
   0% {padding-top: 22vh;}
   100% {padding-top: 0vh;}
 }
 .start-btn {
   cursor: pointer;
-  transition: 0.5s;
+  transition: 0.8s;
   font-size: 2.2vh;
   background-color: transparent;
   border:none;
@@ -33,14 +39,14 @@ body {
 .start-btn:hover, .leaderboard-btn:hover{
   text-decoration: none;
   color:darkcyan;
-  transition: 0.5s;
+  transition: 0.8s;
   letter-spacing: 0.3vw;
 }
 
 .leaderboard-btn {
   font-size: 2.2vh;
   cursor: pointer;
-  transition: 0.5s;
+  transition: 0.8s;
   background-color: transparent;
   border:none;
   margin-top: 20vh;
@@ -65,4 +71,19 @@ input:hover{
   outline: none;
   box-shadow: 5px 5px 5px purple;
   transition: 1s;
+}
+
+.leaderboard-page, .game-page {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  border-radius: 15px;
+  background-color: white;
+  margin: 0 20vw;
+  margin-top: 8vh;
+  opacity: 0.75;  
+}
+
+
+th {
+  padding-right: 15vw;
+  padding-left: 5vw;
 }
