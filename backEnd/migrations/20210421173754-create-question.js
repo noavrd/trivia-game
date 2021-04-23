@@ -6,34 +6,37 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       question: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       from_table: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       from_colum: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       type: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       rate: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+      },
+      most_least: {
+        type: Sequelize.STRING,
       },
       created_at: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updated_at: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('questions');
-  }
+  },
 };

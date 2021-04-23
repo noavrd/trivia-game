@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       from_colum: DataTypes.STRING,
       type: DataTypes.INTEGER,
       rate: DataTypes.INTEGER,
+      most_least: DataTypes.STRING,
     },
     {
       sequelize,
