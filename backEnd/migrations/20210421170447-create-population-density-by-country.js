@@ -6,46 +6,46 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       rank: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       country: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       aria_km2: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING,
       },
       aria_mi2: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING,
       },
       population: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       density_pop_km2: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       density_pop_mi2: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       date: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       population_source: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       created_at: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updated_at: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('population_density_by_countries');
-  }
+  },
 };
