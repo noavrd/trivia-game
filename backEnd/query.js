@@ -15,24 +15,24 @@ const typeOneTemplateArr = [
   {
     keyWord: ['most', 'least'],
     optionForKeyWord: [
-        {
-          table: population_density_by_country,
-          column: 'aria_km2',
-          most: 'Which country is most densely populated?',
-          least: 'Which country is least densely populated?',
-        },
-        {
-          table: Countries_general,
-          column: 'phones',
-          most: 'Which country hat the most cell phones per person?',
-          least: 'Which country hat the least cell phones per person?',
-        },
-        {
-          table: population_density_by_country,
-          column: 'population',
-          most: 'Which country is most populous?',
-          least: 'Which country is least populous?',
-        },
+      {
+        table: population_density_by_country,
+        column: 'aria_km2',
+        most: 'Which country is most densely populated?',
+        least: 'Which country is least densely populated?',
+      },
+      {
+        table: Countries_general,
+        column: 'phones',
+        most: 'Which country hat the most cell phones per person?',
+        least: 'Which country hat the least cell phones per person?',
+      },
+      {
+        table: population_density_by_country,
+        column: 'population',
+        most: 'Which country is most populous?',
+        least: 'Which country is least populous?',
+      },
       {
         table: Crime_index_by_country,
         column: 'crime_index',
@@ -41,23 +41,23 @@ const typeOneTemplateArr = [
       },
     ],
   },
-    {
-  keyWord: ['largest', 'smallest'],
-  optionForKeyWord: [
-    {
-      table: population_density_by_country,
-      column: 'aria_km2',
-      largest: 'Which country is the largest by total area?',
-      smallest: 'Which country is the smallest by total area?',
-    },
-    {
-      table: quality_of_life_index_by_country,
-      column: 'traffic_commute_time_index',
-      largest: 'Which country has the largest traffic time?',
-      smallest: 'Which country has the smallest traffic time?',
-    },
-      ],
-    },
+  {
+    keyWord: ['largest', 'smallest'],
+    optionForKeyWord: [
+      {
+        table: population_density_by_country,
+        column: 'aria_km2',
+        largest: 'Which country is the largest by total area?',
+        smallest: 'Which country is the smallest by total area?',
+      },
+      {
+        table: quality_of_life_index_by_country,
+        column: 'traffic_commute_time_index',
+        largest: 'Which country has the largest traffic time?',
+        smallest: 'Which country has the smallest traffic time?',
+      },
+    ],
+  },
 ];
 
 const typeTwoTemplateArr = [
@@ -135,15 +135,13 @@ async function questionGeneratorTypeOneFunc() {
     },
   });
 
-  //   console.log(countries);
-
   const typeOneQuestionObj = {};
   let valuesArr = await Promise.all(
     allTable.map((country) => country.toJSON())
   );
   let columnsVals = valuesArr.map((data) => data[column]);
   let countryVals = valuesArr.map((data) => data['country']);
-  console.log(columnsVals);
+
   if (keyWord === 'most' || keyWord === 'largest') {
     const maxVal = Math.max(...columnsVals);
     let maxValIndex;
@@ -225,7 +223,7 @@ function questionGeneratorTypeTwoFunc() {
       typeTwoQuestionObj.parameterB = column;
       typeTwoQuestionObj.rating = 0;
       typeTwoQuestionObj.numOfVotes = 0;
-
+      console.log(typeTwoQuestionObj);
       return typeTwoQuestionObj;
     })
     .catch((err) => console.log(err));
@@ -289,7 +287,7 @@ function questionGeneratorTypeThreeFunc() {
 }
 
 async function questionGenerator() {
-  const randomType = Math.floor(Math.random() * 3) + 1;
+  const randomType = Math.floor(Math.random() * 2) + 1;
   switch (randomType) {
     case 1:
       return await questionGeneratorTypeOneFunc();
@@ -299,17 +297,13 @@ async function questionGenerator() {
       return await questionGeneratorTypeTwoFunc();
       break;
 
-    case 3:
-      return await questionGeneratorTypeThreeFunc();
-      break;
+    // case 3:
+    //   return await questionGeneratorTypeThreeFunc();
+    //   break;
 
     default:
       break;
   }
 }
 
-// (async function a() {
-//   Question.create(await questionGenerator());
-// })();
-console.log(questionGeneratorTypeOneFunc());
 module.exports = { questionGenerator };

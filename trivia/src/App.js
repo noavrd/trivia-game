@@ -4,11 +4,13 @@ import Game from "./components/Game";
 import EndGame from "./components/EndGame";
 import LeaderBoard from "./components/LeaderBoard";
 
+
 import './App.css';
 
 function App() {
   return (
     <div className="App">
+      
       <BrowserRouter>
       <Switch>
         <Route exact path="/" component={Home}/>
