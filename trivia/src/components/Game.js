@@ -7,9 +7,9 @@ export default function Game() {
     axios
       .get('questions')
       .then((result) => {
-        setQuestion(result.data.question);
         setOptions(result.data.options);
         setAnswer(result.data.options[0]);
+        setQuestion(result.data.question);
       })
       .catch((err) => console.log(err));
   };
@@ -25,6 +25,7 @@ export default function Game() {
   const [question, setQuestion] = useState('');
   const [score, setScore] = useState(0);
 
+
   const [answer, setAnswer] = useState('');
   useEffect(() => {
     getQuestion();
@@ -32,7 +33,9 @@ export default function Game() {
 
   //add score by your answer
   const rightAnswer = () => {
-    getQuestion();
+    setTimeout(() => {
+      getQuestion();
+    }, 1000);
     return setScore(score + 100);
   };
   const wrongAnswer = () => {
