@@ -11,10 +11,10 @@ const {
 } = require('./models');
 const { Sequelize, Op } = require('sequelize');
 
-const typeOneTemplateArr = [
+const firstTypeQuestions = [
   {
-    keyWord: ['most', 'least'],
-    optionForKeyWord: [
+    key: ['most', 'least'],
+    optionForKey: [
       {
         table: population_density_by_country,
         column: 'aria_km2',
@@ -42,8 +42,8 @@ const typeOneTemplateArr = [
     ],
   },
   {
-    keyWord: ['largest', 'smallest'],
-    optionForKeyWord: [
+    key: ['largest', 'smallest'],
+    optionForKey: [
       {
         table: population_density_by_country,
         column: 'aria_km2',
@@ -112,18 +112,18 @@ const typeTwoTemplateArr = [
 //   },
 // ];
 
-async function questionGeneratorTypeOneFunc() {
-  const questionTemplate =
-    typeOneTemplateArr[Math.floor(Math.random() * typeOneTemplateArr.length)];
-  const keyWord = questionTemplate.keyWord[Math.floor(Math.random() * 2)];
-  const optionForKeyWordIndex = Math.floor(
-    Math.random() * questionTemplate.optionForKeyWord.length
+async function firstTypeQuestionsGenerator() {
+  const chooseQuestion =
+    firstTypeQuestions[Math.floor(Math.random() * firstTypeQuestions.length)];
+  const key = chooseQuestion.key[Math.floor(Math.random() * 2)];
+  const chooseKey = Math.floor(
+    Math.random() * chooseQuestion.optionForKey.length
   );
-  const Table = questionTemplate.optionForKeyWord[optionForKeyWordIndex].table;
+  const Table = chooseQuestion.optionForKey[chooseKey].table;
   const column =
-    questionTemplate.optionForKeyWord[optionForKeyWordIndex].column;
+    chooseQuestion.optionForKey[chooseKey].column;
 
-  const allTable = await Table.findAll({
+  const answers = await Table.findAll({
     order: Sequelize.literal('rand()'),
     limit: 4,
     attributes: ['country', column],
@@ -135,64 +135,64 @@ async function questionGeneratorTypeOneFunc() {
     },
   });
 
-  const typeOneQuestionObj = {};
+  const questionFromFirstType = {};
   let valuesArr = await Promise.all(
-    allTable.map((country) => country.toJSON())
+    answers.map((country) => country.toJSON())
   );
-  let columnsVals = valuesArr.map((data) => data[column]);
-  let countryVals = valuesArr.map((data) => data['country']);
+  let columnsArr = valuesArr.map((data) => data[column]);
+  let countriesArr = valuesArr.map((data) => data['country']);
 
-  if (keyWord === 'most' || keyWord === 'largest') {
-    const maxVal = Math.max(...columnsVals);
+  if (key === 'most' || key === 'largest') {
+    const maxVal = Math.max(...columnsArr);
     let maxValIndex;
 
-    if (typeof columnsVals[0] === 'number') {
-      maxValIndex = columnsVals.indexOf(maxVal);
+    if (typeof columnsArr[0] === 'number') {
+      maxValIndex = columnsArr.indexOf(maxVal);
     } else {
-      maxValIndex = columnsVals.indexOf(String(maxVal));
+      maxValIndex = columnsArr.indexOf(String(maxVal));
     }
-    typeOneQuestionObj.answer = valuesArr[maxValIndex].country;
-    countryVals = countryVals.filter(
-      (value) => value !== typeOneQuestionObj.answer
+    questionFromFirstType.answer = valuesArr[maxValIndex].country;
+    countriesArr = countriesArr.filter(
+      (value) => value !== questionFromFirstType.answer
     );
   } else {
-    const minVal = Math.min(...columnsVals);
+    const minVal = Math.min(...columnsArr);
     let minValIndex;
-    if (typeof columnsVals[0] === 'number') {
-      minValIndex = columnsVals.indexOf(minVal);
+    if (typeof columnsArr[0] === 'number') {
+      minValIndex = columnsArr.indexOf(minVal);
     } else {
-      minValIndex = columnsVals.indexOf(String(minVal));
+      minValIndex = columnsArr.indexOf(String(minVal));
     }
-    typeOneQuestionObj.answer = valuesArr[minValIndex].country;
-    countryVals = countryVals.filter(
-      (value) => value !== typeOneQuestionObj.answer
+    questionFromFirstType.answer = valuesArr[minValIndex].country;
+    countriesArr = countriesArr.filter(
+      (value) => value !== questionFromFirstType.answer
     );
   }
-  console.log(typeOneQuestionObj);
+  console.log(questionFromFirstType);
 
-  typeOneQuestionObj.type = 'type_one';
-  typeOneQuestionObj.question =
-    questionTemplate.optionForKeyWord[optionForKeyWordIndex][keyWord];
-  typeOneQuestionObj.questionValues = JSON.stringify(valuesArr);
-  typeOneQuestionObj.optionA = countryVals.pop();
-  typeOneQuestionObj.optionB = countryVals.pop();
-  typeOneQuestionObj.optionC = countryVals.pop();
-  typeOneQuestionObj.parameterA = 'country';
-  typeOneQuestionObj.parameterB = column;
-  typeOneQuestionObj.rating = 0;
-  typeOneQuestionObj.numOfVotes = 0;
+  questionFromFirstType.type = 'type_one';
+  questionFromFirstType.question =
+    chooseQuestion.optionForKey[chooseKey][key];
+  questionFromFirstType.questionValues = JSON.stringify(valuesArr);
+  questionFromFirstType.optionA = countriesArr.pop();
+  questionFromFirstType.optionB = countriesArr.pop();
+  questionFromFirstType.optionC = countriesArr.pop();
+  questionFromFirstType.parameterA = 'country';
+  questionFromFirstType.parameterB = column;
+  questionFromFirstType.rating = 0;
+  questionFromFirstType.numOfVotes = 0;
 
-  console.log(typeOneQuestionObj);
-  return typeOneQuestionObj;
+  console.log(questionFromFirstType);
+  return questionFromFirstType;
 }
 
-function questionGeneratorTypeTwoFunc() {
-  const questionTemplate =
+function secondTypeQuestionsGenerator() {
+  const chooseQuestion =
     typeTwoTemplateArr[Math.floor(Math.random() * typeTwoTemplateArr.length)];
 
-  const column = questionTemplate.column;
-  const table = questionTemplate.table;
-  let template = questionTemplate.template;
+  let template = chooseQuestion.template;
+  const column = chooseQuestion.column;
+  const table = chooseQuestion.table;
 
   return table
     .findAll({
@@ -207,94 +207,95 @@ function questionGeneratorTypeTwoFunc() {
       },
     })
     .then((countries) => {
-      const typeTwoQuestionObj = {};
+      const secondTypeQuestion = {};
       const valuesArr = countries.map((country) => country.toJSON());
 
       template = template.replace('country', valuesArr[0].country);
 
-      typeTwoQuestionObj.type = 'type_Two';
-      typeTwoQuestionObj.question = template;
-      typeTwoQuestionObj.questionValues = JSON.stringify(valuesArr);
-      typeTwoQuestionObj.answer = valuesArr.shift()[column];
-      typeTwoQuestionObj.optionA = valuesArr.pop()[column];
-      typeTwoQuestionObj.optionB = valuesArr.pop()[column];
-      typeTwoQuestionObj.optionC = valuesArr.pop()[column];
-      typeTwoQuestionObj.parameterA = 'country';
-      typeTwoQuestionObj.parameterB = column;
-      typeTwoQuestionObj.rating = 0;
-      typeTwoQuestionObj.numOfVotes = 0;
-      console.log(typeTwoQuestionObj);
-      return typeTwoQuestionObj;
+      secondTypeQuestion.type = 'type_Two';
+      secondTypeQuestion.question = template;
+      secondTypeQuestion.questionValues = JSON.stringify(valuesArr);
+      secondTypeQuestion.answer = valuesArr.shift()[column];
+      secondTypeQuestion.optionA = valuesArr.pop()[column];
+      secondTypeQuestion.optionB = valuesArr.pop()[column];
+      secondTypeQuestion.optionC = valuesArr.pop()[column];
+      secondTypeQuestion.parameterA = 'country';
+      secondTypeQuestion.parameterB = column;
+      secondTypeQuestion.rating = 0;
+      secondTypeQuestion.numOfVotes = 0;
+      console.log(secondTypeQuestion);
+      return secondTypeQuestion;
     })
     .catch((err) => console.log(err));
 }
 
-function questionGeneratorTypeThreeFunc() {
-  const questionObj =
-    typeThreeTemplateArr[
-      Math.floor(Math.random() * typeThreeTemplateArr.length)
-    ];
-  const template = questionObj.template;
-  const column = questionObj.column;
+// function questionGeneratorTypeThreeFunc() {
+//   const chooseQuestion =
+//     typeThreeTemplateArr[
+//       Math.floor(Math.random() * typeThreeTemplateArr.length)
+//     ];
+//   const template = chooseQuestion.template;
+//   const column = chooseQuestion.column;
+//   const table = chooseQuestion.table;
 
-  return CountriesTable.findAll({
-    order: Sequelize.literal('rand()'),
-    limit: 2,
-    attributes: ['country', column],
-    where: {
-      [Op.or]: [
-        { [column]: { [Op.ne]: null } },
-        { [column]: { [Op.ne]: undefined } },
-      ],
-    },
-  }).then((countries) => {
-    const typeThreeQuestionObj = {};
-    const valuesArr = countries.map((country) => country.toJSON());
-    const columnsVals = valuesArr.map((data) => data[column]);
-    const countryVals = valuesArr.map((data) => data['country']);
-    const question = template
-      .replace('X', countryVals[0])
-      .replace('Y', countryVals[1]);
-    const maxVal = Math.max(...columnsVals);
-    let maxValIndex;
+//   return table.findAll({
+//     order: Sequelize.literal('rand()'),
+//     limit: 2,
+//     attributes: ['country', column],
+//     where: {
+//       [Op.or]: [
+//         { [column]: { [Op.ne]: null } },
+//         { [column]: { [Op.ne]: undefined } },
+//       ],
+//     },
+//   }).then((countries) => {
+//     const thirdTypeQuestion = {};
+//     const valuesArr = countries.map((country) => country.toJSON());
+//     const columnsArr = valuesArr.map((data) => data[column]);
+//     const countriesArr = valuesArr.map((data) => data['country']);
+//     const question = template
+//       .replace('X', countriesArr[0])
+//       .replace('Y', countriesArr[1]);
+//     const maxVal = Math.max(...columnsArr);
+//     let maxValIndex;
 
-    if (typeof columnsVals[0] === 'number') {
-      maxValIndex = columnsVals.indexOf(maxVal);
-    } else {
-      maxValIndex = columnsVals.indexOf(String(maxVal));
-    }
+//     if (typeof columnsArr[0] === 'number') {
+//       maxValIndex = columnsArr.indexOf(maxVal);
+//     } else {
+//       maxValIndex = columnsArr.indexOf(String(maxVal));
+//     }
 
-    if (maxValIndex === 0) {
-      typeThreeQuestionObj.answer = 'Yes';
-    } else {
-      typeThreeQuestionObj.answer = 'No';
-    }
+//     if (maxValIndex === 0) {
+//       thirdTypeQuestion.answer = 'Yes';
+//     } else {
+//       thirdTypeQuestion.answer = 'No';
+//     }
 
-    typeThreeQuestionObj.questionValues = JSON.stringify(valuesArr);
-    typeThreeQuestionObj.type = 'type_three';
-    typeThreeQuestionObj.question = question;
-    typeThreeQuestionObj.optionA = null;
-    typeThreeQuestionObj.optionB = null;
-    typeThreeQuestionObj.optionC = null;
-    typeThreeQuestionObj.questionAbout = questionObj.questionAbout;
-    typeThreeQuestionObj.parameterA = 'country';
-    typeThreeQuestionObj.parameterB = column;
-    typeThreeQuestionObj.rating = 0;
-    typeThreeQuestionObj.numOfVotes = 0;
+//     thirdTypeQuestion.questionValues = JSON.stringify(valuesArr);
+//     thirdTypeQuestion.type = 'type_three';
+//     thirdTypeQuestion.question = question;
+//     thirdTypeQuestion.optionA = null;
+//     thirdTypeQuestion.optionB = null;
+//     thirdTypeQuestion.optionC = null;
+//     thirdTypeQuestion.questionAbout = chooseQuestion.questionAbout;
+//     thirdTypeQuestion.parameterA = 'country';
+//     thirdTypeQuestion.parameterB = column;
+//     thirdTypeQuestion.rating = 0;
+//     thirdTypeQuestion.numOfVotes = 0;
 
-    return typeThreeQuestionObj;
-  });
-}
+//     return thirdTypeQuestion;
+//   });
+// }
 
 async function questionGenerator() {
   const randomType = Math.floor(Math.random() * 2) + 1;
   switch (randomType) {
     case 1:
-      return await questionGeneratorTypeOneFunc();
+      return await firstTypeQuestionsGenerator();
       break;
 
     case 2:
-      return await questionGeneratorTypeTwoFunc();
+      return await secondTypeQuestionsGenerator();
       break;
 
     // case 3:
