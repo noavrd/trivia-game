@@ -7,7 +7,7 @@ const {
   updateRank,
   GetSavedQuestion,
 } = require('./backEnd/updateTable');
-
+const { showBoard, addUser } = require('./backEnd/leaderBoard');
 app.use(cors());
 app.use(express.json());
 
@@ -26,6 +26,24 @@ app.get('/questions', async (req, res) => {
     let question = await questionGenerator();
     console.log(question);
     res.status(200).json(questionAndAnswer(question));
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+app.get('/leaderboard', async (req, res) => {
+  try {
+    let users = await showBoard();
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+app.post('/user', async (req, res) => {
+  try {
+    let user = req.body;
+    let newUser = await addUser(user.user_name, user.score);
+    res.status(200).send('added a new user successfully');
   } catch (err) {
     res.status(500).send(err);
   }
