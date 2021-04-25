@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-
+import { useEffect, useMemo, useState } from 'react';
+import RateQuestion from './RateQuestion';
 import axios from 'axios';
 
 export default function Game() {
@@ -24,15 +24,19 @@ export default function Game() {
   const [options, setOptions] = useState([]);
   const [question, setQuestion] = useState('');
   const [score, setScore] = useState(0);
-
   const [answer, setAnswer] = useState('');
+
+  const randomOptions = useMemo(() => getRandomOptions(options), [options]);
+
   useEffect(() => {
     getQuestion();
   }, []);
 
   //add score by your answer
   const rightAnswer = () => {
-    getQuestion();
+    setTimeout(() => {
+      getQuestion();
+    }, 1000);
     return setScore(score + 100);
   };
   const wrongAnswer = () => {
@@ -45,12 +49,12 @@ export default function Game() {
   return (
     <div>
       <h1 className="generalHeadline">World Trivia</h1>
-
+      <RateQuestion />
       <div className="game-page">
         <div>score: {score}</div>
         <div>{question}</div>
 
-        {randomOptions(options).map((option, i) =>
+        {randomOptions.map((option, i) =>
           findRightAnswer(option) ? (
             <div key={i} onClick={rightAnswer}>
               {option}{' '}
@@ -66,7 +70,7 @@ export default function Game() {
   );
 }
 
-const randomOptions = (options) => {
+const getRandomOptions = (options) => {
   let shuffled = options.sort(() => 0.5 - Math.random());
   return shuffled;
 };

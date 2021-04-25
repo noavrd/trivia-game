@@ -2,7 +2,12 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const { questionGenerator } = require('./backEnd/query');
-const { saveQuestion, updateRank } = require('./backEnd/updateTable');
+const {
+  saveQuestion,
+  updateRank,
+  GetSavedQuestion,
+} = require('./backEnd/updateTable');
+
 app.use(cors());
 app.use(express.json());
 
@@ -39,11 +44,20 @@ app.post('/savequestions', async (req, res) => {
 app.put('/rank', async (req, res) => {
   try {
     let rank = req.body;
-    console.log(rank);
+    console.log(rank.rank);
+    console.log(rank.id);
     let update = await updateRank(rank.rank, rank.id);
-    // console.log(update);
-    // console.log(rank.rank);
+    console.log(update);
     res.status(200).send('update successfully');
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+app.get('/saved', async (req, res) => {
+  try {
+    let questions = await GetSavedQuestion();
+
+    res.status(200).json(questions);
   } catch (err) {
     res.status(500).send(err);
   }

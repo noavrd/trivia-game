@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       rate3: DataTypes.INTEGER,
       rate4: DataTypes.INTEGER,
       rate5: DataTypes.INTEGER,
-      average_rate: DataTypes.INTEGER,
+      average_rate: DataTypes.STRING,
     },
     {
       sequelize,
