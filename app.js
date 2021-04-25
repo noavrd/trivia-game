@@ -33,6 +33,7 @@ app.get('/questions', async (req, res) => {
 app.get('/leaderboard', async (req, res) => {
   try {
     let users = await showBoard();
+    console.log(users);
     res.status(200).json(users);
   } catch (err) {
     res.status(500).send(err);
