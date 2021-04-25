@@ -25,7 +25,6 @@ export default function Game() {
   const [question, setQuestion] = useState('');
   const [score, setScore] = useState(0);
 
-
   const [answer, setAnswer] = useState('');
   useEffect(() => {
     getQuestion();
@@ -33,9 +32,7 @@ export default function Game() {
 
   //add score by your answer
   const rightAnswer = () => {
-    setTimeout(() => {
-      getQuestion();
-    }, 1000);
+    getQuestion();
     return setScore(score + 100);
   };
   const wrongAnswer = () => {
