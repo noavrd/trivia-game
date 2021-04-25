@@ -4,7 +4,7 @@ async function saveQuestion(question) {
   try {
     const save = await savedQuestion.create(
       {
-        question_name: question.question,
+        question_name: question.question_name,
         answer_name: question.options[0],
         option1: question.options[1],
         option2: question.options[2],
