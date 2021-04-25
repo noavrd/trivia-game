@@ -144,6 +144,7 @@ async function updateRank(rank, id) {
 function GetSavedQuestion() {
   return savedQuestion.findAll({
     attributes: [
+        'id',
       'question_name',
       'answer_name',
       'option1',

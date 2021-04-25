@@ -25,10 +25,9 @@ export default function Game() {
   const [question, setQuestion] = useState('');
   const [score, setScore] = useState(0);
   const [answer, setAnswer] = useState('');
-  const [savedQuestion, setSavedQuestion] = useState([]);
-  const [ifSaved, setIfSaved] = useState('');
 
-  const randomOptions = useMemo(() => getRandomOptions(options), [options]);
+  const [id, setId] = useState();
+  const randomOptions = useMemo(() => shuffleArray(options), [options]);
 
   useEffect(() => {
     getQuestion();
@@ -37,7 +36,6 @@ export default function Game() {
   //add score by your answer
   const rightAnswer = () => {
     setTimeout(() => {
-      checkIfSaved(question, options);
       getQuestion();
     }, 1000);
     return setScore(score + 100);
@@ -49,44 +47,12 @@ export default function Game() {
 
   //check if question is saved
 
-  function checkIfSaved(questions, options) {
-    setIfSaved('');
-    console.log(ifSaved);
-    axios
-      .get('saved')
-      .then((result) => {
-        console.log(result);
-        setSavedQuestion(result.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    savedQuestion.map((saved) =>
-      saved.question_name === questions && saved.options === options
-        ? setIfSaved(saved)
-        : ''
-    );
-    console.log(questions);
-    console.log(question);
-    console.log(options);
-    if (ifSaved === '' && questions !== null) {
-      axios
-        .post('savequestions', {
-          options: options,
-          question_name: questions,
-        })
-        .then((result) => {
-          console.log(result);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }
-
+  // console.log(id);
   return (
     <div>
       <h1 className="generalHeadline">World Trivia</h1>
+      <CheckIfSaved />
+      <TakeId question={question} options={options} />
       <RateQuestion />
       <div className="game-page">
         <div>score: {score}</div>
@@ -107,8 +73,70 @@ export default function Game() {
     </div>
   );
 }
+function CheckIfSaved(questions, options) {
+  let ifSaved = '';
+  let savedQuestion = [];
+  axios
+    .get('saved')
+    .then((result) => {
+      savedQuestion = result.data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  console.log(savedQuestion);
+  savedQuestion.map((saved) =>
+    saved.question_name === questions && saved.options === options
+      ? (ifSaved = saved)
+      : ''
+  );
+  if (ifSaved === '') {
+    axios
+      .post('savequestions', {
+        options: options,
+        question_name: questions,
+      })
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  return <></>;
+}
+function TakeId(question, options) {
+  let found;
+  let questionArr = [];
+  let id;
+  axios
+    .get('saved')
+    .then((result) => {
+      questionArr = result.data;
+      console.log(result.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  questionArr.map((saved) =>
+    saved.question_name === question && saved.options === options
+      ? (found = saved)
+      : ''
+  );
+  console.log(found);
+  if (found !== undefined) {
+    id = found.id;
+    console.log(id);
+    return id;
+  }
+  return <></>;
+}
 
-const getRandomOptions = (options) => {
-  let shuffled = options.sort(() => 0.5 - Math.random());
-  return shuffled;
-};
+function shuffleArray(array) {
+  const array2 = array.slice();
+  for (let i = array2.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array2[i], array2[j]] = [array2[j], array2[i]];
+  }
+  return array2;
+}
