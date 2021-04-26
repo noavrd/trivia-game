@@ -6,6 +6,7 @@ import LeaderBoard from "./components/LeaderBoard";
 
 
 import './App.css';
+import NotFound from "./components/NotFound";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route exact path="/game" component={Game} />
         <Route exact path="/endgame" component={EndGame} />
         <Route exact path="/leaderboard" component={LeaderBoard}/>
+        <Route component={NotFound}/>
       </Switch>
       </BrowserRouter>
     </div>

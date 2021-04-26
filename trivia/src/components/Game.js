@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import RateQuestion from './RateQuestion';
 import axios from 'axios';
+import home from "./home.png"
+import { Link } from "react-router-dom";
+
 
 export default function Game() {
   const getQuestion = () => {
@@ -25,6 +28,7 @@ export default function Game() {
   const [question, setQuestion] = useState('');
   const [score, setScore] = useState(0);
   const [answer, setAnswer] = useState('');
+  const [strikes, setStrikes] = useState(0);
 
   const [id, setId] = useState();
   const randomOptions = useMemo(() => shuffleArray(options), [options]);
@@ -42,12 +46,35 @@ export default function Game() {
   };
   const wrongAnswer = () => {
     getQuestion();
+    setStrikes(strikes + 1)
     return setScore(score);
   };
 
-  //check if question is saved
+  const exit = (e) => {
+    if (!window.confirm("Are you sure you want to Exit?")) {
+      e.preventDefault();
+    } 
+  }
 
-  // console.log(id);
+
+  if(strikes === 3) {
+    return (
+      <div>
+         <h1 className="generalHeadline">World Trivia</h1>
+        <div className="game-page">
+         <div>Game Over</div>
+         <div>score: {score}</div>
+         {/* add rank */}
+         {/* <div>You`ve finished {rank}</div> */}
+
+        </div>
+         <Link
+                to={{ pathname: '/' }}>
+                <img src={home}></img><br/>
+        </Link>
+      </div>
+    )
+  }
   return (
     <div>
       <h1 className="generalHeadline">World Trivia</h1>
@@ -55,7 +82,11 @@ export default function Game() {
       <TakeId question={question} options={options} />
       <RateQuestion />
       <div className="game-page">
-        <div>score: {score}</div>
+          <span>score: {score}</span>
+          <span className={`strikes ${strikes === 1 || strikes === 2 ?"have-strike": ""}`}>X </span>
+          <span className={`strikes ${strikes === 2 ? "have-strike" :""}`}>X </span>
+          <span className="strikes">X </span>
+
         <div>{question}</div>
 
         {randomOptions.map((option, i) =>
@@ -70,6 +101,10 @@ export default function Game() {
           )
         )}
       </div>
+        <Link
+                to={{ pathname: '/' }}>
+                <img src={home} onClick={ (e) => exit(e)}></img><br/>
+        </Link>
     </div>
   );
 }

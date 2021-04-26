@@ -5,7 +5,12 @@ body {
   background-repeat: no-repeat;
   text-align: center;
 }
-
+.strikes{
+  color:darkgray;
+}
+.have-strike{
+  color: red;
+}
 .homeHeadline {
   font-family: 'Sansita Swashed', cursive;
   font-size: 9vh; 
@@ -19,7 +24,12 @@ body {
   animation-name: headline;
   animation-duration: 1s;
 }
+.home-btn{
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 
+}
 @keyframes startheadline {
   0% {padding-top: 0vh;}
   100% {padding-top: 22vh;}
@@ -27,6 +37,9 @@ body {
 @keyframes headline {
   0% {padding-top: 22vh;}
   100% {padding-top: 0vh;}
+}
+.fa-arrow-right{
+padding-right: 1vw;
 }
 .start-btn {
   cursor: pointer;

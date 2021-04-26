@@ -30,7 +30,7 @@ export default function Home() {
             START
           </button>
         </Link>
-        <div>{isErr ? 'Please enter UserName' : ''}</div>
+        <div>{isErr ? 'Please enter user name' : ''}</div>
       </form>
       <Link to={{ pathname: '/leaderboard'}}>
         <button className="leaderboard-btn">Leader Board</button>

@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import home from "./home.png"
+import { Link } from "react-router-dom";
+
 export default function LeaderBoard() {
   const [leaders, setLeaders] = useState([]);
   useEffect(() => {
@@ -32,6 +35,10 @@ export default function LeaderBoard() {
           ))}
         </table>
       </div>
+        <Link
+                to={{ pathname: '/' }}>
+                <img src={home}></img><br/>
+        </Link>
     </div>
   );
 }
