@@ -18,6 +18,7 @@ export default function Game() {
   const [previousQuestion, setPreviousQuestion] = useState('');
   const [previousOptions, setPreviousOptions] = useState([]);
 
+  //get question from data
   const getQuestion = () => {
     axios
       .get('questions')
@@ -28,6 +29,8 @@ export default function Game() {
       })
       .catch((err) => console.log(err));
   };
+
+  //find the first option = right answer and then shuffle the options
   const findRightAnswer = (option) => {
     if (answer !== '') {
       if (option === answer) {
@@ -36,18 +39,20 @@ export default function Game() {
       return false;
     }
   };
+  const randomOptions = useMemo(() => shuffleArray(options), [options]);
 
   useEffect(() => {
     getQuestion();
   }, []);
 
+  //save question
   useEffect(() => {
     if (question !== '') {
       checkIfSaved(question, options);
-      // takeId(question, options);
     }
   }, [question]);
 
+  //add timer to each question
   useEffect(() => {
     let timer;
     if (seconds === 0.5) {
@@ -60,18 +65,7 @@ export default function Game() {
     };
   }, [seconds]);
 
-  const randomOptions = useMemo(() => shuffleArray(options), [options]);
-
-  //save userName and score
-  // const userAndScoreSave = () => {
-  //   try {
-  //     axios.post('user', { user_name: queryParams, score: score });
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
-  //add score by your answer
+  //right answer
   const rightAnswer = () => {
     setTimeout(() => {
       setScore((prev) =>
@@ -91,6 +85,7 @@ export default function Game() {
       setStartedTime((prev) => (prev > 5 ? 20 - 0.5 * correctAnswers : 5));
     }, 1000);
   };
+  //wrong answer
   const wrongAnswer = () => {
     setSeconds(startedTime);
     setPreviousQuestion(question);
@@ -100,12 +95,13 @@ export default function Game() {
     setStrikes(strikes + 1);
     return setScore(score);
   };
-
   const exit = (e) => {
     if (!window.confirm('Are you sure you want to Exit?')) {
       e.preventDefault();
     }
   };
+
+  //save userName and score
   useEffect(() => {
     if (strikes === 3) {
       try {
@@ -116,6 +112,8 @@ export default function Game() {
       }
     }
   }, [strikes]);
+
+  //when the game is over
   if (strikes === 3) {
     return (
       <div>
@@ -123,8 +121,6 @@ export default function Game() {
         <div className="game-page">
           <div>Game Over</div>
           <div>score: {score}</div>
-          {/* add rank */}
-          {/* <div>You`ve finished {rank}</div> */}
         </div>
         <Link to={{ pathname: '/' }}>
           <img src={home}></img>
@@ -132,7 +128,9 @@ export default function Game() {
         </Link>
       </div>
     );
-  } else {
+  }
+  //the game continues running
+  else {
     return (
       <div>
         <div> {seconds}</div>
@@ -179,13 +177,13 @@ export default function Game() {
     );
   }
 }
-
+//take userName from data
 function useQuery() {
   let queryParams = new URLSearchParams(useLocation().search);
   queryParams = queryParams.get('userName');
   return queryParams;
 }
-
+//check if the question is saved
 async function checkIfSaved(questions, options) {
   try {
     let ifSaved = '';
@@ -208,40 +206,9 @@ async function checkIfSaved(questions, options) {
   } catch (err) {
     alert(err);
   }
-
-  // axios
-  //   .get('saved')
-  //   .then((result) => {
-  //     savedQuestion = result.data;
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
-  // savedQuestion.find((saved) =>
-  //   saved.question_name === questions &&
-  //   saved.answer_name === options[0] &&
-  //   saved.option1 === options[1] &&
-  //   saved.option2 === options[2] &&
-  //   saved.option3 === options[3]
-  //     ? (ifSaved = saved)
-  //     : ''
-  // );
-  // if (ifSaved === '') {
-  //   axios
-  //     .post('savequestions', {
-  //       options: options,
-  //       question_name: questions,
-  //     })
-  //     .then((result) => {
-  //       console.log(result);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }
   return <></>;
 }
-
+//shuffle all the options
 function shuffleArray(array) {
   const array2 = array.slice();
   for (let i = array2.length - 1; i > 0; i--) {
