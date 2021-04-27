@@ -48,25 +48,27 @@ export default function Game() {
     }
   }, [question]);
 
-  //Timer foe each Question
+  useEffect(() => {
+    let timer;
+    if (seconds === 0.5) {
+      timer = setInterval(() => setSeconds(seconds - 0.5), 500);
+    } else {
+      timer = seconds > 0 && setInterval(() => setSeconds(seconds - 1), 1000);
+    }
+    return () => {
+      clearInterval(timer);
+    };
+  }, [seconds]);
 
   // useEffect(() => {
-  //   const timer =
-  //     seconds > 0 && setInterval(() => setSeconds(seconds - 1), 1000);
-  //   return () => {
-  //     clearInterval(timer);
-  //   };
+  //   const timeout = setTimeout(() => {
+  //     if (seconds > 0) {
+  //       setSeconds(seconds - 1);
+  //     }
+  //   }, 1000);
+
+  //   return () => clearTimeout(timeout);
   // }, [seconds]);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (seconds > 0) {
-        setSeconds(seconds - 1);
-      }
-    }, 1000);
-
-    return () => clearTimeout(timeout);
-  }, [seconds]);
   const randomOptions = useMemo(() => shuffleArray(options), [options]);
 
   //add score by your answer
