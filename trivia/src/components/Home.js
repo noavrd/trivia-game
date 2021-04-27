@@ -25,14 +25,14 @@ export default function Home() {
           required
         ></input>
         <br />
-        <Link to={{ pathname: '/game' }}>
+        <Link to={{ pathname: '/game', search: `userName= ${userName}` }}>
           <button onClick={(e) => login(e)} className="start-btn">
             START
           </button>
         </Link>
         <div>{isErr ? 'Please enter user name' : ''}</div>
       </form>
-      <Link to={{ pathname: '/leaderboard'}}>
+      <Link to={{ pathname: '/leaderboard' }}>
         <button className="leaderboard-btn">Leader Board</button>
       </Link>
     </div>

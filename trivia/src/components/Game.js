@@ -1,11 +1,23 @@
 import { useEffect, useMemo, useState } from 'react';
 import RateQuestion from './RateQuestion';
 import axios from 'axios';
-import home from "./home.png"
-import { Link } from "react-router-dom";
-
+import home from './home.png';
+import { Link, useLocation } from 'react-router-dom';
 
 export default function Game() {
+  const queryParams = useQuery();
+
+  const [options, setOptions] = useState([]);
+  const [question, setQuestion] = useState('');
+  const [score, setScore] = useState(0);
+  const [answer, setAnswer] = useState('');
+  const [strikes, setStrikes] = useState(0);
+  const [seconds, setSeconds] = useState(20);
+  const [correctAnswer, setCorrectAnswer] = useState(0);
+  const [startedTime, setStartedTime] = useState(20);
+  const [previousQuestion, setPreviousQuestion] = useState('');
+  const [previousOptions, setPreviousOptions] = useState([]);
+
   const getQuestion = () => {
     axios
       .get('questions')
@@ -24,146 +36,198 @@ export default function Game() {
       return false;
     }
   };
-  const [options, setOptions] = useState([]);
-  const [question, setQuestion] = useState('');
-  const [score, setScore] = useState(0);
-  const [answer, setAnswer] = useState('');
-  const [strikes, setStrikes] = useState(0);
-
-  const [id, setId] = useState();
-  const randomOptions = useMemo(() => shuffleArray(options), [options]);
 
   useEffect(() => {
     getQuestion();
   }, []);
 
+  useEffect(() => {
+    if (question !== '') {
+      checkIfSaved(question, options);
+      // takeId(question, options);
+    }
+  }, [question]);
+
+  //Timer foe each Question
+
+  // useEffect(() => {
+  //   const timer =
+  //     seconds > 0 && setInterval(() => setSeconds(seconds - 1), 1000);
+  //   return () => {
+  //     clearInterval(timer);
+  //   };
+  // }, [seconds]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (seconds > 0) {
+        setSeconds(seconds - 1);
+      }
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, [seconds]);
+  const randomOptions = useMemo(() => shuffleArray(options), [options]);
+
   //add score by your answer
   const rightAnswer = () => {
     setTimeout(() => {
+      setScore((prev) =>
+        Math.floor(
+          prev + ((1 - (startedTime - seconds) / startedTime) * 70 + 30)
+        )
+      );
+      setPreviousQuestion(question);
+      setPreviousOptions(options);
       getQuestion();
+      let correctAnswers;
+      setCorrectAnswer((prev) => {
+        correctAnswers = prev;
+        return prev + 1;
+      });
+      setSeconds(startedTime > 5 ? 20 - 0.5 * correctAnswers : 5);
+      setStartedTime((prev) => (prev > 5 ? 20 - 0.5 * correctAnswers : 5));
     }, 1000);
-    return setScore(score + 100);
   };
   const wrongAnswer = () => {
+    setSeconds(startedTime);
+    setPreviousQuestion(question);
+    setPreviousOptions(options);
+
     getQuestion();
-    setStrikes(strikes + 1)
+    setStrikes(strikes + 1);
     return setScore(score);
   };
 
   const exit = (e) => {
-    if (!window.confirm("Are you sure you want to Exit?")) {
+    if (!window.confirm('Are you sure you want to Exit?')) {
       e.preventDefault();
-    } 
-  }
+    }
+  };
 
-
-  if(strikes === 3) {
+  if (strikes === 3) {
     return (
       <div>
-         <h1 className="generalHeadline">World Trivia</h1>
+        <h1 className="generalHeadline">World Trivia</h1>
         <div className="game-page">
-         <div>Game Over</div>
-         <div>score: {score}</div>
-         {/* add rank */}
-         {/* <div>You`ve finished {rank}</div> */}
-
+          <div>Game Over</div>
+          <div>score: {score}</div>
+          {/* add rank */}
+          {/* <div>You`ve finished {rank}</div> */}
         </div>
-         <Link
-                to={{ pathname: '/' }}>
-                <img src={home}></img><br/>
+        <Link to={{ pathname: '/' }}>
+          <img src={home}></img>
+          <br />
         </Link>
       </div>
-    )
-  }
-  return (
-    <div>
-      <h1 className="generalHeadline">World Trivia</h1>
-      <CheckIfSaved />
-      <TakeId question={question} options={options} />
-      <RateQuestion />
-      <div className="game-page">
+    );
+  } else {
+    return (
+      <div>
+        <div> {seconds}</div>
+        {seconds === 0 ? wrongAnswer() : ''}
+        <h1 className="generalHeadline">World Trivia</h1>
+
+        <RateQuestion
+          prevQuestion={previousQuestion}
+          prevOption={previousOptions}
+        />
+        <div className="game-page">
           <span>score: {score}</span>
-          <span className={`strikes ${strikes === 1 || strikes === 2 ?"have-strike": ""}`}>X </span>
-          <span className={`strikes ${strikes === 2 ? "have-strike" :""}`}>X </span>
+          <span
+            className={`strikes ${
+              strikes === 1 || strikes === 2 ? 'have-strike' : ''
+            }`}
+          >
+            X{' '}
+          </span>
+          <span className={`strikes ${strikes === 2 ? 'have-strike' : ''}`}>
+            X{' '}
+          </span>
           <span className="strikes">X </span>
 
-        <div>{question}</div>
+          <div>{question}</div>
 
-        {randomOptions.map((option, i) =>
-          findRightAnswer(option) ? (
-            <div key={i} onClick={rightAnswer}>
-              {option}{' '}
-            </div>
-          ) : (
-            <div key={i} onClick={wrongAnswer}>
-              {option}
-            </div>
-          )
-        )}
-      </div>
-        <Link
-                to={{ pathname: '/' }}>
-                <img src={home} onClick={ (e) => exit(e)}></img><br/>
+          {randomOptions.map((option, i) =>
+            findRightAnswer(option) ? (
+              <div key={i} onClick={rightAnswer}>
+                {option}{' '}
+              </div>
+            ) : (
+              <div key={i} onClick={wrongAnswer}>
+                {option}
+              </div>
+            )
+          )}
+        </div>
+        <Link to={{ pathname: '/' }}>
+          <img src={home} onClick={(e) => exit(e)}></img>
+          <br />
         </Link>
-    </div>
-  );
+      </div>
+    );
+  }
 }
-function CheckIfSaved(questions, options) {
-  let ifSaved = '';
-  let savedQuestion = [];
-  axios
-    .get('saved')
-    .then((result) => {
-      savedQuestion = result.data;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  console.log(savedQuestion);
-  savedQuestion.map((saved) =>
-    saved.question_name === questions && saved.options === options
-      ? (ifSaved = saved)
-      : ''
-  );
-  if (ifSaved === '') {
-    axios
-      .post('savequestions', {
+
+function useQuery() {
+  let queryParams = new URLSearchParams(useLocation().search);
+  queryParams = queryParams.get('userName');
+  return queryParams;
+}
+
+async function checkIfSaved(questions, options) {
+  try {
+    let ifSaved = '';
+    const { data: savedQuestion } = await axios.get('saved');
+    savedQuestion.find((saved) =>
+      saved.question_name === questions &&
+      saved.answer_name === options[0] &&
+      saved.option1 === options[1] &&
+      saved.option2 === options[2] &&
+      saved.option3 === options[3]
+        ? (ifSaved = saved)
+        : ''
+    );
+    if (ifSaved === '') {
+      axios.post('savequestions', {
         options: options,
         question_name: questions,
-      })
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((err) => {
-        console.log(err);
       });
+    }
+  } catch (err) {
+    alert(err);
   }
-  return <></>;
-}
-function TakeId(question, options) {
-  let found;
-  let questionArr = [];
-  let id;
-  axios
-    .get('saved')
-    .then((result) => {
-      questionArr = result.data;
-      console.log(result.data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  questionArr.map((saved) =>
-    saved.question_name === question && saved.options === options
-      ? (found = saved)
-      : ''
-  );
-  console.log(found);
-  if (found !== undefined) {
-    id = found.id;
-    console.log(id);
-    return id;
-  }
+
+  // axios
+  //   .get('saved')
+  //   .then((result) => {
+  //     savedQuestion = result.data;
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   });
+  // savedQuestion.find((saved) =>
+  //   saved.question_name === questions &&
+  //   saved.answer_name === options[0] &&
+  //   saved.option1 === options[1] &&
+  //   saved.option2 === options[2] &&
+  //   saved.option3 === options[3]
+  //     ? (ifSaved = saved)
+  //     : ''
+  // );
+  // if (ifSaved === '') {
+  //   axios
+  //     .post('savequestions', {
+  //       options: options,
+  //       question_name: questions,
+  //     })
+  //     .then((result) => {
+  //       console.log(result);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }
   return <></>;
 }
 
