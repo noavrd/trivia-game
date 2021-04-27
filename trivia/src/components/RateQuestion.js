@@ -6,7 +6,7 @@ function RateQuestion({ prevQuestion, prevOption }) {
   const [id, setId] = useState(0);
   useEffect(() => {
     setId(takeId(prevQuestion, prevOption));
-    console.log('hellooooooo');
+   
   }, [prevQuestion]);
 
   useEffect(() => {
@@ -35,12 +35,7 @@ async function takeId(question, options) {
     const { data: questionArr } = await axios.get('saved');
 
     const found = questionArr.find((saved) => {
-      console.log(saved.question_name === question);
-      console.log(saved.answer_name === options[0]);
-      console.log(saved.option1 === options[1]);
-      console.log(saved.option2 === options[2]);
-      console.log(saved.option3 === options[3]);
-      console.log(saved);
+  
       return (
         saved.question_name === question &&
         saved.answer_name === options[0] &&

@@ -60,16 +60,16 @@ export default function Game() {
     };
   }, [seconds]);
 
-  // useEffect(() => {
-  //   const timeout = setTimeout(() => {
-  //     if (seconds > 0) {
-  //       setSeconds(seconds - 1);
-  //     }
-  //   }, 1000);
-
-  //   return () => clearTimeout(timeout);
-  // }, [seconds]);
   const randomOptions = useMemo(() => shuffleArray(options), [options]);
+
+  //save userName and score
+  // const userAndScoreSave = () => {
+  //   try {
+  //     axios.post('user', { user_name: queryParams, score: score });
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   //add score by your answer
   const rightAnswer = () => {
@@ -106,7 +106,16 @@ export default function Game() {
       e.preventDefault();
     }
   };
-
+  useEffect(() => {
+    if (strikes === 3) {
+      try {
+        axios.post('user', { user_name: queryParams, score: score });
+        console.log('helloeeeeee');
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }, [strikes]);
   if (strikes === 3) {
     return (
       <div>
