@@ -44,7 +44,6 @@ async function takeId(question, options) {
     });
 
     if (found !== undefined) {
-      window.alert(found.id);
       return found.id;
     }
   } catch (e) {
