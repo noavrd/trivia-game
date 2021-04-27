@@ -133,7 +133,7 @@ export default function Game() {
   else {
     return (
       <div>
-        <div> {seconds}</div>
+        <div className="timer"> {seconds}</div>
         {seconds === 0 ? wrongAnswer() : ''}
         <h1 className="generalHeadline">World Trivia</h1>
 
