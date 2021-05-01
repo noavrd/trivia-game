@@ -110,3 +110,18 @@ th {
 .timer {
   font-size: 30px;
 }
+.star {
+  animation-name: stars;
+  animation-duration: 1s;
+  position: absolute;
+  left: 44%;
+  top: 35%;
+}
+@keyframes stars {
+  0% {
+    padding-top: 22vh;
+  }
+  100% {
+    padding-top: 0vh;
+  }
+}

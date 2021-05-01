@@ -17,6 +17,7 @@ export default function Game() {
   const [startedTime, setStartedTime] = useState(20);
   const [previousQuestion, setPreviousQuestion] = useState('');
   const [previousOptions, setPreviousOptions] = useState([]);
+  // const [id, setId] = useState(0);
 
   //get question from data
   const getQuestion = () => {
@@ -26,8 +27,11 @@ export default function Game() {
         setOptions(result.data.options);
         setAnswer(result.data.options[0]);
         setQuestion(result.data.question);
+        console.log(result);
       })
       .catch((err) => console.log(err));
+    // setId(takeId(question, options));
+    console.log(question);
   };
 
   //find the first option = right answer and then shuffle the options
@@ -55,16 +59,18 @@ export default function Game() {
   //add timer to each question
   useEffect(() => {
     let timer;
-    if (seconds === 0.5) {
-      timer = setInterval(() => setSeconds(seconds - 0.5), 500);
-    } else {
-      timer = seconds > 0 && setInterval(() => setSeconds(seconds - 1), 1000);
+
+    console.log('HERE');
+    timer = setInterval(() => setSeconds((prev) => prev - 0.5), 500);
+
+    if (seconds <= 0) {
+      clearInterval(timer);
     }
     return () => {
       clearInterval(timer);
     };
   }, [seconds]);
-
+  console.log(answer);
   //right answer
   const rightAnswer = () => {
     setTimeout(() => {
@@ -76,13 +82,13 @@ export default function Game() {
       setPreviousQuestion(question);
       setPreviousOptions(options);
       getQuestion();
-      let correctAnswers;
-      setCorrectAnswer((prev) => {
-        correctAnswers = prev;
-        return prev + 1;
-      });
-      setSeconds(startedTime > 5 ? 20 - 0.5 * correctAnswers : 5);
-      setStartedTime((prev) => (prev > 5 ? 20 - 0.5 * correctAnswers : 5));
+      // let correctAnswers;
+      // setCorrectAnswer((prev) => {
+      //   correctAnswers = prev;
+      //   return prev + 1;
+      // });
+      setSeconds(startedTime > 5 ? startedTime - 0.5 : 5);
+      setStartedTime((prev) => (prev > 5 ? prev - 0.5 : 5));
     }, 1000);
   };
   //wrong answer
@@ -112,7 +118,9 @@ export default function Game() {
       }
     }
   }, [strikes]);
-
+  // useEffect(() => {
+  //   setId(takeId(question, options));
+  // }, [question]);
   //when the game is over
   if (strikes === 3) {
     return (

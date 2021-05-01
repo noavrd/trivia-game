@@ -1,39 +1,54 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import ReactStars from 'react-stars';
 
 function RateQuestion({ prevQuestion, prevOption }) {
-  const [rate, setRate] = useState(0);
-  const [id, setId] = useState(0);
-  useEffect(() => {
-    setId(takeId(prevQuestion, prevOption));
-  }, [prevQuestion]);
+  const [value, setValue] = useState();
 
-  useEffect(() => {
-    axios.put('/rank', {
-      rank: rate,
-      id: id,
-    });
-    console.log('update');
-  }, [rate]);
-  return (
-    <div>
-      <h3>Rate me:</h3>
-      <span onClick={() => setRate(1)} className="fa fa-star"></span>
-      <span onClick={() => setRate(2)} className="fa fa-star"></span>
-      <span onClick={() => setRate(3)} className="fa fa-star"></span>
-      <span onClick={() => setRate(4)} className="fa fa-star"></span>
-      <span onClick={() => setRate(5)} className="fa fa-star"></span>
-    </div>
-  );
+  const ratingChanged = (newRating) => {};
+  const starRating = {
+    size: 40,
+    count: 5,
+    half: false,
+    value: 3,
+
+    onChange: async (newValue) => {
+      try {
+        const idTest = await takeId(prevQuestion, prevOption);
+        // setId(idTest);
+        console.log(idTest);
+        setValue(value);
+        await axios.put('rank', {
+          rank: newValue,
+          id: idTest,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+      // console.log(newValue);
+    },
+  };
+
+  // console.log(id);
+  if (prevQuestion) {
+    return (
+      <div>
+        <h3>Rate previous question :</h3>
+        <div className="star">
+          <ReactStars {...starRating} />
+        </div>
+      </div>
+    );
+  } else {
+    return <></>;
+  }
 }
 
 export default RateQuestion;
-
 async function takeId(question, options) {
   try {
-    const { data: questionArr } = await axios.get('saved');
-
-    const found = questionArr.find((saved) => {
+    const found = await axios.get('saved');
+    const id = await found.data.find((saved) => {
       return (
         saved.question_name === question &&
         saved.answer_name === options[0] &&
@@ -43,10 +58,8 @@ async function takeId(question, options) {
       );
     });
 
-    if (found !== undefined) {
-      return found.id;
-    }
-  } catch (e) {
-    alert(e.message);
+    return id.id;
+  } catch (err) {
+    console.log(err);
   }
 }
