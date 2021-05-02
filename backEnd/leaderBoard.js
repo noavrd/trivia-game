@@ -3,7 +3,6 @@ const { Sequelize } = require('sequelize');
 
 async function showBoard() {
   try {
-    console.log(1);
     let allUsers = await user.findAll({
       order: Sequelize.literal('score DESC'),
       attributes: ['id', 'user_name', 'score'],
@@ -13,16 +12,27 @@ async function showBoard() {
     console.log(err);
   }
 }
-async function addUser(user_name, score) {
+async function USERS() {
   try {
-    const board = await user.create(
-      { user_name: user_name, score: score },
-      { fields: ['user_name', 'score'] }
-    );
-    return board;
+    let allUsers = await user.findAll({
+      attributes: ['id', 'user_name', 'password'],
+    });
+    return allUsers;
   } catch (err) {
     console.log(err);
   }
 }
+async function addUser(user_name, password) {
+  try {
+    const board = await user.create(
+      { user_name: user_name, password: password },
+      { fields: ['user_name', 'password', 'score'] }
+    );
+    return board;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
 
-module.exports = { showBoard, addUser };
+module.exports = { showBoard, addUser, USERS };

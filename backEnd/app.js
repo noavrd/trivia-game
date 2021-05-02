@@ -1,15 +1,17 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const { questionGenerator } = require('./backEnd/query');
-const {
-  saveQuestion,
-  updateRank,
-  GetSavedQuestion,
-} = require('./backEnd/updateTable');
-const { showBoard, addUser } = require('./backEnd/leaderBoard');
+const { questionGenerator } = require('./query');
+const users = require('./routes/users.js');
+const { checkAccessToken } = require('./middlewares/index');
+const morgan = require('morgan');
+
+const { saveQuestion, updateRank, GetSavedQuestion } = require('./updateTable');
+const { showBoard } = require('./leaderBoard');
 app.use(cors());
 app.use(express.json());
+app.use('/users', users);
+app.use(morgan('tiny'));
 
 const questionAndAnswer = (question) => {
   let values = [
@@ -32,23 +34,14 @@ app.get('/questions', async (req, res) => {
 });
 app.get('/leaderboard', async (req, res) => {
   try {
-    let users = await showBoard();
-    console.log(users);
-    res.status(200).json(users);
+    let user = await showBoard();
+    console.log(user);
+    res.status(200).json(user);
   } catch (err) {
     res.status(500).send(err);
   }
 });
 
-app.post('/user', async (req, res) => {
-  try {
-    let user = req.body;
-    let newUser = await addUser(user.user_name, user.score);
-    res.status(200).send('added a new user successfully');
-  } catch (err) {
-    res.status(500).send(err);
-  }
-});
 app.post('/savequestions', async (req, res) => {
   try {
     let save = req.body;
@@ -81,6 +74,15 @@ app.get('/saved', async (req, res) => {
     res.status(500).send(err);
   }
 });
+
+const errorHandler = (error, req, res, next) => {
+  console.error(error);
+  console.error(error.message);
+
+  next(error);
+};
+app.use(errorHandler);
+
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () =>

@@ -17,7 +17,7 @@ export default function Game() {
   const [startedTime, setStartedTime] = useState(20);
   const [previousQuestion, setPreviousQuestion] = useState('');
   const [previousOptions, setPreviousOptions] = useState([]);
-  // const [id, setId] = useState(0);
+  
 
   //get question from data
   const getQuestion = () => {
