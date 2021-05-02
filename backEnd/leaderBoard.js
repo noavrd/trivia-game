@@ -26,7 +26,7 @@ async function addUser(user_name, password) {
   try {
     const board = await user.create(
       { user_name: user_name, password: password },
-      { fields: ['user_name', 'password', 'score'] }
+      { fields: ['user_name', 'password'] }
     );
     return board;
   } catch (err) {
@@ -34,5 +34,22 @@ async function addUser(user_name, password) {
     throw err;
   }
 }
+async function addScore(user_name, score) {
+  try {
+    // let allUsers = await user.findAll({
+    //   where: {user_name: user_name},
+    //   attributes: [ 'user_name','score'],
+    // });
+    const updateScore = await user.update(
+      { score: score },
+      { where: { user_name: user_name } },
+      { fields: ['user_name', 'score'] }
+    );
+    return updateScore;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
 
-module.exports = { showBoard, addUser, USERS };
+module.exports = { showBoard, addUser, USERS, addScore };

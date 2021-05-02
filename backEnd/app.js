@@ -3,11 +3,9 @@ const cors = require('cors');
 const app = express();
 const { questionGenerator } = require('./query');
 const users = require('./routes/users.js');
-const { checkAccessToken } = require('./middlewares/index');
 const morgan = require('morgan');
-
 const { saveQuestion, updateRank, GetSavedQuestion } = require('./updateTable');
-const { showBoard } = require('./leaderBoard');
+const { showBoard, addScore } = require('./leaderBoard');
 app.use(cors());
 app.use(express.json());
 app.use('/users', users);
@@ -41,7 +39,16 @@ app.get('/leaderboard', async (req, res) => {
     res.status(500).send(err);
   }
 });
-
+app.put('/addscore', async (req, res) => {
+  try {
+    let score = req.body;
+    let update = await addScore(score.user_name, score.score);
+    console.log(update);
+    res.status(200).send('update successfully');
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
 app.post('/savequestions', async (req, res) => {
   try {
     let save = req.body;

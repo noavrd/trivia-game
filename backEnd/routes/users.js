@@ -6,7 +6,6 @@ const { USERS, addUser } = require('../leaderBoard');
 const users = Router();
 
 users.post('/register', async (req, res, next) => {
-  console.log('hiiiiii');
   try {
     const { user_name, password } = req.body;
 
