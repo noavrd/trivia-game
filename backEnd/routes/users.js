@@ -1,4 +1,4 @@
-const { Router } = require('express');
+const { Router, text } = require('express');
 const { hashSync, compare } = require('bcrypt');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
@@ -29,10 +29,10 @@ users.post('/register', async (req, res, next) => {
   }
 });
 
-users.post('/login', async (req, res) => {
+users.post('/login', async (req, res, next) => {
   const { user_name, password } = req.body;
-
-  const user = USERS.find((entry) => entry.user_name === user_name);
+  const allUsers = await USERS();
+  const user = allUsers.find((entry) => entry.user_name === user_name);
 
   if (!user) {
     return res.status(404).send('cannot find user');
@@ -49,8 +49,9 @@ users.post('/login', async (req, res) => {
         expiresIn: '10s',
       }
     );
+    res.send('login successfully');
   } catch (err) {
-    console.log(err);
+    next(err);
   }
 });
 module.exports = users;
