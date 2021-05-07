@@ -36,10 +36,6 @@ async function addUser(user_name, password) {
 }
 async function addScore(user_name, score) {
   try {
-    // let allUsers = await user.findAll({
-    //   where: {user_name: user_name},
-    //   attributes: [ 'user_name','score'],
-    // });
     const updateScore = await user.update(
       { score: score },
       { where: { user_name: user_name } },

@@ -1,6 +1,6 @@
+require('dotenv').config();
 const { Router, text } = require('express');
 const { hashSync, compare } = require('bcrypt');
-require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const { USERS, addUser } = require('../leaderBoard');
 const users = Router();
@@ -39,7 +39,7 @@ users.post('/login', async (req, res, next) => {
   try {
     const isPasswordCorrect = await compare(password, user.password);
     if (!isPasswordCorrect) {
-      return res.status(403).send('User or Password incorrect');
+      return res.status(403).send('Password incorrect');
     }
     const jsonToken = jwt.sign(
       { user: user_name },
