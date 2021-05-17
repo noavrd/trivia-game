@@ -11,7 +11,6 @@ app.use(express.json());
 app.use('/users', users);
 app.use(morgan('tiny'));
 
-
 const questionAndAnswer = (question) => {
   let values = [
     question.answer,
@@ -76,7 +75,6 @@ app.put('/rank', async (req, res) => {
 app.get('/saved', async (req, res) => {
   try {
     let questions = await GetSavedQuestion();
-
     res.status(200).json(questions);
   } catch (err) {
     res.status(500).send(err);

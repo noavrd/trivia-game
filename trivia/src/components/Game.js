@@ -13,12 +13,9 @@ export default function Game() {
   const [answer, setAnswer] = useState('');
   const [strikes, setStrikes] = useState(0);
   const [seconds, setSeconds] = useState(20);
-  const [correctAnswer, setCorrectAnswer] = useState(0);
   const [startedTime, setStartedTime] = useState(20);
   const [previousQuestion, setPreviousQuestion] = useState('');
   const [previousOptions, setPreviousOptions] = useState([]);
-  
-
   //get question from data
   const getQuestion = () => {
     axios
@@ -30,7 +27,6 @@ export default function Game() {
         console.log(result);
       })
       .catch((err) => console.log(err));
-    // setId(takeId(question, options));
     console.log(question);
   };
 
@@ -44,7 +40,6 @@ export default function Game() {
     }
   };
   const randomOptions = useMemo(() => shuffleArray(options), [options]);
-
   useEffect(() => {
     getQuestion();
   }, []);
@@ -59,10 +54,8 @@ export default function Game() {
   //add timer to each question
   useEffect(() => {
     let timer;
-
     console.log('HERE');
     timer = setInterval(() => setSeconds((prev) => prev - 0.5), 500);
-
     if (seconds <= 0) {
       clearInterval(timer);
     }
@@ -70,7 +63,7 @@ export default function Game() {
       clearInterval(timer);
     };
   }, [seconds]);
-  console.log(answer);
+
   //right answer
   const rightAnswer = () => {
     setTimeout(() => {
@@ -82,11 +75,6 @@ export default function Game() {
       setPreviousQuestion(question);
       setPreviousOptions(options);
       getQuestion();
-      // let correctAnswers;
-      // setCorrectAnswer((prev) => {
-      //   correctAnswers = prev;
-      //   return prev + 1;
-      // });
       setSeconds(startedTime > 5 ? startedTime - 0.5 : 5);
       setStartedTime((prev) => (prev > 5 ? prev - 0.5 : 5));
     }, 1000);
@@ -96,7 +84,6 @@ export default function Game() {
     setSeconds(startedTime);
     setPreviousQuestion(question);
     setPreviousOptions(options);
-
     getQuestion();
     setStrikes(strikes + 1);
     return setScore(score);
@@ -110,17 +97,20 @@ export default function Game() {
   //save userName and score
   useEffect(() => {
     if (strikes === 3) {
-      try {
-        axios.post('user', { user_name: queryParams, score: score });
-        console.log('helloeeeeee');
-      } catch (err) {
-        console.log(err);
-      }
+      axios
+        .put('addscore', {
+          user_name: queryParams,
+          score: score.toString(),
+        })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, [strikes]);
-  // useEffect(() => {
-  //   setId(takeId(question, options));
-  // }, [question]);
+
   //when the game is over
   if (strikes === 3) {
     return (
