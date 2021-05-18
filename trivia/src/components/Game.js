@@ -136,12 +136,11 @@ export default function Game({ user }) {
         <h1 className="generalHeadline">World Trivia</h1>
 
         <div className="game-page">
-          <span>score: {score}</span>
+          <span>score: {score} </span>
           <span
             className={`strikes ${
               strikes === 1 || strikes === 2 ? 'have-strike' : ''
-            }`}
-          >
+            }`}>
             X{' '}
           </span>
           <span className={`strikes ${strikes === 2 ? 'have-strike' : ''}`}>
@@ -153,11 +152,11 @@ export default function Game({ user }) {
 
           {randomOptions.map((option, i) =>
             findRightAnswer(option) ? (
-              <div key={i} onClick={rightAnswer}>
+              <div className="option" key={i} onClick={rightAnswer}>
                 {option}{' '}
               </div>
             ) : (
-              <div key={i} onClick={wrongAnswer}>
+              <div className="option" key={i} onClick={wrongAnswer}>
                 {option}
               </div>
             )
