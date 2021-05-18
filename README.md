@@ -8,7 +8,7 @@ This trivia is just for you!
 
 Register or log in (after you signed up), click on play and that's it!
 
-![web](./gif/trivia1.gif)
+![web](./gif/trivia.gif)
 
 ## Rules
 
@@ -18,8 +18,6 @@ You start from 20 seconds to answer a question, if you had a right answer the ti
 Be Quick! your score depends on how fast you will answer!
 
 The smartest person will win the game!
-
-![web](./gif/trivia3.gif)
 
 ## Setup in localhost
 
