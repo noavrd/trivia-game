@@ -5,6 +5,7 @@ import Game from './components/Game';
 import EndGame from './components/EndGame';
 import LeaderBoard from './components/LeaderBoard';
 import Signin from './components/Signin';
+import HashLoader from 'react-spinners/HashLoader';
 
 import './App.css';
 import NotFound from './components/NotFound';
@@ -12,6 +13,7 @@ import { useState, useEffect } from 'react';
 
 function App() {
   const [user, setUser] = useState({ name: '', accessToken: '' });
+  const [spinner, setSpinner] = useState(false);
   axios.defaults.headers.common['authorization'] = `bearer ${user.accessToken}`;
 
   axios.defaults.withCredentials = true;
@@ -38,15 +40,38 @@ function App() {
       return Promise.reject(error);
     }
   );
+  async function logout() {
+    try {
+      await axios.post('users/logout');
+      setUser({ name: '', accessToken: '' });
+    } catch (err) {
+      console.log(err);
+    }
+  }
   useEffect(() => {
     const fetchUser = async () => {
-      const res = await axios.post('users/refreshToken');
-      setUser(res.data);
+      setSpinner(true);
+      try {
+        const res = await axios.post('users/refreshToken');
+        setUser(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+      setSpinner(false);
     };
     fetchUser();
   }, []);
+  if (spinner) {
+    return <HashLoader color={'#f8ae40'} loading={spinner} size={150} />;
+  }
+
   return (
     <div className="App">
+      {user.name && (
+        <button className="start-btn" onClick={logout}>
+          Logout
+        </button>
+      )}
       <BrowserRouter>
         <Switch>
           <Route
