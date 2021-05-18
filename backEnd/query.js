@@ -77,41 +77,7 @@ const typeTwoTemplateArr = [
     template: 'In what continent is country?',
   },
 ];
-
-// const typeThreeTemplateArr = [
-//   {
-//     table: 'population_density_by_countries',
-//     template: 'Are there more people in X than in Y?',
-//     column: 'population',
-//     questionAbout: 'population',
-//   },
-//   {
-//     template: 'Is X larger than Y?',
-//     column: 'density_pop_km2',
-//     questionAbout: 'Area in km',
-//   },
-//   {
-//     template: 'Does X have a higher population density than Y?',
-//     column: 'density_pop_km2',
-//   },
-//   {
-//     template:
-//       'Is the quality of life in X higher than the quality of life in Y?',
-//     column: 'quality_of_life_index',
-//     questionAbout: 'Quality of living index',
-//   },
-//   {
-//     template: 'Is the crime rate of X higher than the crime rate in Y?',
-//     column: 'crime_index',
-//     questionAbout: 'Crime rate index',
-//   },
-//   {
-//     template: 'Are restaurants in X more expensive than restaurants in Y?',
-//     column: 'restaurant_price_index',
-//     questionAbout: 'Restaurant price index',
-//   },
-// ];
-
+  
 async function firstTypeQuestionsGenerator() {
   const chooseQuestion =
     firstTypeQuestions[Math.floor(Math.random() * firstTypeQuestions.length)];
@@ -182,7 +148,6 @@ async function firstTypeQuestionsGenerator() {
   questionFromFirstType.rating = 0;
   questionFromFirstType.numOfVotes = 0;
 
-  console.log(questionFromFirstType);
   return questionFromFirstType;
 }
 
@@ -229,64 +194,6 @@ function secondTypeQuestionsGenerator() {
     .catch((err) => console.log(err));
 }
 
-// function questionGeneratorTypeThreeFunc() {
-//   const chooseQuestion =
-//     typeThreeTemplateArr[
-//       Math.floor(Math.random() * typeThreeTemplateArr.length)
-//     ];
-//   const template = chooseQuestion.template;
-//   const column = chooseQuestion.column;
-//   const table = chooseQuestion.table;
-
-//   return table.findAll({
-//     order: Sequelize.literal('rand()'),
-//     limit: 2,
-//     attributes: ['country', column],
-//     where: {
-//       [Op.or]: [
-//         { [column]: { [Op.ne]: null } },
-//         { [column]: { [Op.ne]: undefined } },
-//       ],
-//     },
-//   }).then((countries) => {
-//     const thirdTypeQuestion = {};
-//     const valuesArr = countries.map((country) => country.toJSON());
-//     const columnsArr = valuesArr.map((data) => data[column]);
-//     const countriesArr = valuesArr.map((data) => data['country']);
-//     const question = template
-//       .replace('X', countriesArr[0])
-//       .replace('Y', countriesArr[1]);
-//     const maxVal = Math.max(...columnsArr);
-//     let maxValIndex;
-
-//     if (typeof columnsArr[0] === 'number') {
-//       maxValIndex = columnsArr.indexOf(maxVal);
-//     } else {
-//       maxValIndex = columnsArr.indexOf(String(maxVal));
-//     }
-
-//     if (maxValIndex === 0) {
-//       thirdTypeQuestion.answer = 'Yes';
-//     } else {
-//       thirdTypeQuestion.answer = 'No';
-//     }
-
-//     thirdTypeQuestion.questionValues = JSON.stringify(valuesArr);
-//     thirdTypeQuestion.type = 'type_three';
-//     thirdTypeQuestion.question = question;
-//     thirdTypeQuestion.optionA = null;
-//     thirdTypeQuestion.optionB = null;
-//     thirdTypeQuestion.optionC = null;
-//     thirdTypeQuestion.questionAbout = chooseQuestion.questionAbout;
-//     thirdTypeQuestion.parameterA = 'country';
-//     thirdTypeQuestion.parameterB = column;
-//     thirdTypeQuestion.rating = 0;
-//     thirdTypeQuestion.numOfVotes = 0;
-
-//     return thirdTypeQuestion;
-//   });
-// }
-
 async function questionGenerator() {
   const randomType = Math.floor(Math.random() * 2) + 1;
   switch (randomType) {
@@ -297,10 +204,6 @@ async function questionGenerator() {
     case 2:
       return await secondTypeQuestionsGenerator();
       break;
-
-    // case 3:
-    //   return await questionGeneratorTypeThreeFunc();
-    //   break;
 
     default:
       break;

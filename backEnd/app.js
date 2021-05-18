@@ -24,7 +24,6 @@ const questionAndAnswer = (question) => {
 app.get('/questions', async (req, res) => {
   try {
     let question = await questionGenerator();
-    console.log(question);
     res.status(200).json(questionAndAnswer(question));
   } catch (err) {
     res.status(500).send(err);
@@ -33,7 +32,6 @@ app.get('/questions', async (req, res) => {
 app.get('/leaderboard', async (req, res) => {
   try {
     let user = await showBoard();
-    console.log(user);
     res.status(200).json(user);
   } catch (err) {
     res.status(500).send(err);
@@ -63,8 +61,6 @@ app.post('/savequestions', async (req, res) => {
 app.put('/rank', async (req, res) => {
   try {
     let rank = req.body;
-    console.log(rank.rank);
-    console.log(rank.id);
     let update = await updateRank(rank.rank, rank.id);
     console.log(update);
     res.status(200).send('update successfully');

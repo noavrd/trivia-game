@@ -22,10 +22,8 @@ export default function Game({ user }) {
         setOptions(result.data.options);
         setAnswer(result.data.options[0]);
         setQuestion(result.data.question);
-        console.log(result);
       })
       .catch((err) => console.log(err));
-    console.log(question);
   };
 
   //find the first option = right answer and then shuffle the options
@@ -52,7 +50,7 @@ export default function Game({ user }) {
   //add timer to each question
   useEffect(() => {
     let timer;
-    console.log('HERE');
+
     timer = setInterval(() => setSeconds((prev) => prev - 0.5), 500);
     if (seconds <= 0) {
       clearInterval(timer);
@@ -137,10 +135,6 @@ export default function Game({ user }) {
         {seconds === 0 ? wrongAnswer() : ''}
         <h1 className="generalHeadline">World Trivia</h1>
 
-        <RateQuestion
-          prevQuestion={previousQuestion}
-          prevOption={previousOptions}
-        />
         <div className="game-page">
           <span>score: {score}</span>
           <span
@@ -169,6 +163,10 @@ export default function Game({ user }) {
             )
           )}
         </div>
+        <RateQuestion
+          prevQuestion={previousQuestion}
+          prevOption={previousOptions}
+        />
         <Link to={{ pathname: '/' }}>
           <img src={home} onClick={(e) => exit(e)}></img>
           <br />

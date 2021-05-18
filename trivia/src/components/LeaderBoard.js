@@ -13,7 +13,6 @@ export default function LeaderBoard() {
       })
       .catch((err) => console.log(err));
   }, []);
-  console.log(leaders);
 
   return (
     <div>

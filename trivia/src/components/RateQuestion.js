@@ -4,6 +4,7 @@ import ReactStars from 'react-stars';
 
 function RateQuestion({ prevQuestion, prevOption }) {
   const [value, setValue] = useState();
+  const [message, setMessage] = useState('');
 
   const ratingChanged = (newRating) => {};
   const starRating = {
@@ -15,8 +16,7 @@ function RateQuestion({ prevQuestion, prevOption }) {
     onChange: async (newValue) => {
       try {
         const idTest = await takeId(prevQuestion, prevOption);
-        // setId(idTest);
-        console.log(idTest);
+        setMessage('Thanks for rating!');
         setValue(value);
         await axios.put('rank', {
           rank: newValue,
@@ -25,18 +25,26 @@ function RateQuestion({ prevQuestion, prevOption }) {
       } catch (err) {
         console.log(err);
       }
-      // console.log(newValue);
     },
   };
 
-  // console.log(id);
+  useEffect(() => {
+    setMessage('');
+  }, [prevQuestion]);
+
   if (prevQuestion) {
     return (
       <div>
-        <h3>Rate previous question :</h3>
-        <div className="star">
-          <ReactStars {...starRating} />
-        </div>
+        {message ? (
+          <div> {message}</div>
+        ) : (
+          <div>
+            <h3>Rate previous question :</h3>
+            <div className="star">
+              <ReactStars {...starRating} />
+            </div>
+          </div>
+        )}
       </div>
     );
   } else {
