@@ -35,7 +35,6 @@ export default function Signin({ user, setUser }) {
   return (
     <div>
       <h1 className="homeHeadline">World Trivia</h1>
-      {errorMessage && <p>{errorMessage}</p>}
       <input
         type="text"
         placeholder="Enter a new user name"
@@ -50,6 +49,7 @@ export default function Signin({ user, setUser }) {
         required
       ></input>
       <br />
+        {errorMessage && <p className="message-incorrect">{errorMessage}</p>}
       <Link to={{ pathname: '/' }}>
         <button onClick={sign} className="start-btn" variant="contained">
           SignIn

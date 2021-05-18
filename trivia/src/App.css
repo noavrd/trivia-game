@@ -4,6 +4,7 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
   text-align: center;
+  margin-left: 2vw;
 }
 .strikes {
   color: darkgray;
@@ -14,9 +15,7 @@ body {
 .homeHeadline {
   font-family: 'Sansita Swashed', cursive;
   font-size: 9vh;
-  padding-top: 22vh;
-  animation-name: startheadline;
-  animation-duration: 1s;
+  margin-top: 15%;
 }
 .generalHeadline {
   font-family: 'Sansita Swashed', cursive;
@@ -29,14 +28,7 @@ body {
   border: none;
   cursor: pointer;
 }
-@keyframes startheadline {
-  0% {
-    padding-top: 0vh;
-  }
-  100% {
-    padding-top: 22vh;
-  }
-}
+
 @keyframes headline {
   0% {
     padding-top: 22vh;
@@ -70,7 +62,7 @@ body {
   transition: 0.8s;
   background-color: transparent;
   border: none;
-  margin-top: 20vh;
+  margin-top: 11vh;
 }
 
 input {
@@ -124,4 +116,17 @@ th {
   100% {
     padding-top: 0vh;
   }
+}
+.showUser {
+  top: 3%;
+  text-align: left;
+  font-size: 4vh;
+  position: absolute;
+  transition: 0.5s;
+}
+.message-incorrect {
+  color: darkcyan;
+}
+.option {
+  cursor: pointer;
 }

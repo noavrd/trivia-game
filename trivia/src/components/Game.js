@@ -2,11 +2,9 @@ import { useEffect, useMemo, useState } from 'react';
 import RateQuestion from './RateQuestion';
 import axios from 'axios';
 import home from './home.png';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 export default function Game({ user }) {
-  // const queryParams = useQuery();
-
   const [options, setOptions] = useState([]);
   const [question, setQuestion] = useState('');
   const [score, setScore] = useState(0);
@@ -111,7 +109,11 @@ export default function Game({ user }) {
     }
   }, [strikes]);
 
+  if (!user.name) {
+    return <Redirect to="/" />;
+  }
   //when the game is over
+
   if (strikes === 3) {
     return (
       <div>
@@ -175,13 +177,6 @@ export default function Game({ user }) {
     );
   }
 }
-// //take userName from data
-// function useQuery() {
-//   let queryParams = new URLSearchParams(useLocation().search);
-//   queryParams = queryParams.get('userName');
-//   return queryParams;
-// }
-//check if the question is saved
 async function checkIfSaved(questions, options) {
   try {
     let ifSaved = '';
@@ -204,6 +199,7 @@ async function checkIfSaved(questions, options) {
   } catch (err) {
     alert(err);
   }
+
   return <></>;
 }
 //shuffle all the options

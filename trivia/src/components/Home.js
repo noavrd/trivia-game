@@ -9,13 +9,10 @@ export default function Home({ user, setUser }) {
       {user.name ? (
         <div>
           <h2>welcome {user.name} </h2>
-          <Link
-            className="start-btn"
-            to={{ pathname: '/game', search: `userName= ${user.name}` }}
-          >
-            {/* <button className="start-btn" variant="contained"> */}
-            START
-            {/* </button> */}
+          <Link to={{ pathname: '/game' }}>
+            <button className="start-btn" variant="contained">
+              START
+            </button>
           </Link>
         </div>
       ) : (

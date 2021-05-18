@@ -68,9 +68,14 @@ function App() {
   return (
     <div className="App">
       {user.name && (
-        <button className="start-btn" onClick={logout}>
-          Logout
-        </button>
+        <div className="showUser">
+          <i className="fa fa-user-circle-o" aria-hidden="true"></i>
+          <span> {user.name}</span>
+          <br />
+          <button className="start-btn" onClick={logout}>
+            Logout
+          </button>
+        </div>
       )}
       <BrowserRouter>
         <Switch>
