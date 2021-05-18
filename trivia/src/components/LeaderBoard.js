@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import home from "./home.png"
-import { Link } from "react-router-dom";
+import home from './home.png';
+import { Link } from 'react-router-dom';
 
 export default function LeaderBoard() {
   const [leaders, setLeaders] = useState([]);
@@ -27,18 +27,18 @@ export default function LeaderBoard() {
           </tr>
 
           {leaders.map((leader, i) => (
-            <tr>
-              <td>{i}</td>
+            <tr key={i}>
+              <td>{i + 1}</td>
               <td>{leader.user_name}</td>
               <td>{leader.score}</td>
             </tr>
           ))}
         </table>
       </div>
-        <Link
-                to={{ pathname: '/' }}>
-                <img src={home}></img><br/>
-        </Link>
+      <Link to={{ pathname: '/' }}>
+        <img src={home}></img>
+        <br />
+      </Link>
     </div>
   );
 }

@@ -4,8 +4,8 @@ import axios from 'axios';
 import home from './home.png';
 import { Link, useLocation } from 'react-router-dom';
 
-export default function Game() {
-  const queryParams = useQuery();
+export default function Game({ user }) {
+  // const queryParams = useQuery();
 
   const [options, setOptions] = useState([]);
   const [question, setQuestion] = useState('');
@@ -99,8 +99,8 @@ export default function Game() {
     if (strikes === 3) {
       axios
         .put('addscore', {
-          user_name: queryParams,
-          score: score.toString(),
+          user_name: user.name,
+          score: score,
         })
         .then((response) => {
           console.log(response);
@@ -175,12 +175,12 @@ export default function Game() {
     );
   }
 }
-//take userName from data
-function useQuery() {
-  let queryParams = new URLSearchParams(useLocation().search);
-  queryParams = queryParams.get('userName');
-  return queryParams;
-}
+// //take userName from data
+// function useQuery() {
+//   let queryParams = new URLSearchParams(useLocation().search);
+//   queryParams = queryParams.get('userName');
+//   return queryParams;
+// }
 //check if the question is saved
 async function checkIfSaved(questions, options) {
   try {

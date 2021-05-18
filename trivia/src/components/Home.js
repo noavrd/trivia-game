@@ -7,7 +7,17 @@ export default function Home({ user, setUser }) {
     <div className="home">
       <h1 className="homeHeadline">World Trivia</h1>
       {user.name ? (
-        <h2>welcome {user.name} </h2>
+        <div>
+          <h2>welcome {user.name} </h2>
+          <Link
+            className="start-btn"
+            to={{ pathname: '/game', search: `userName= ${user.name}` }}
+          >
+            {/* <button className="start-btn" variant="contained"> */}
+            START
+            {/* </button> */}
+          </Link>
+        </div>
       ) : (
         <>
           <Login setUser={setUser} />

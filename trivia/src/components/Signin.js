@@ -1,30 +1,41 @@
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { useState } from 'react';
+import home from './home.png';
 import axios from 'axios';
-export default function Signin() {
+export default function Signin({ user, setUser }) {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState();
-  const sign = (e) => {
+  const [errorMessage, setErrorMessage] = useState('');
+  const sign = async (e) => {
+    e.preventDefault();
     const user = {
       user_name: userName,
       password: password,
     };
+    let findUser;
     if (!userName || !password) {
-      //   setIsUserExists('user name or password are missing');
-      return e.preventDefault();
+      setErrorMessage('user name or password are missing');
+    } else {
+      try {
+        findUser = await axios.post('users/register', user);
+
+        console.log('success logging in');
+        console.log(findUser);
+        setErrorMessage(false);
+        setUser(findUser.data);
+      } catch (error) {
+        console.log('error invalid user');
+        setErrorMessage('user name already exists');
+      }
     }
-    axios
-      .post('users/register', user)
-      .then((response) => console.log(response))
-      .catch((err) => {
-        e.preventDefault();
-        console.log(err);
-      });
   };
+  if (user.name) {
+    return <Redirect to="/" />;
+  }
   return (
     <div>
       <h1 className="homeHeadline">World Trivia</h1>
-      <h1>Sign in</h1>
+      {errorMessage && <p>{errorMessage}</p>}
       <input
         type="text"
         placeholder="Enter a new user name"
@@ -39,11 +50,14 @@ export default function Signin() {
         required
       ></input>
       <br />
-      <Link to={{ pathname: '/game', search: `userName= ${userName}` }}>
+      <Link to={{ pathname: '/' }}>
         <button onClick={sign} className="start-btn" variant="contained">
-          START
+          SignIn
         </button>
         <br />
+      </Link>
+      <Link to={{ pathname: '/' }}>
+        <img src={home}></img>
       </Link>
     </div>
   );

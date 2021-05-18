@@ -55,13 +55,13 @@ export default function Login({ setUser }) {
           required
         ></input>
         <br />
-        <Link to={{ pathname: '/game', search: `userName= ${userName}` }}>
+        <Link to={{ pathname: '/game' }}>
           <button
             onClick={(e) => login(e)}
             className="start-btn"
             variant="contained"
           >
-            START
+            LOGIN
           </button>
           <br />
         </Link>

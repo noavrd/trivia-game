@@ -37,9 +37,9 @@ async function addUser(user_name, password) {
 async function addScore(user_name, score) {
   try {
     const updateScore = await user.update(
-      { score: score },
-      { where: { user_name: user_name } },
-      { fields: ['user_name', 'score'] }
+      { score },
+      { where: { user_name }, returning: true, plain: true },
+      // { fields: ['user_name', 'score'] }
     );
     return updateScore;
   } catch (err) {

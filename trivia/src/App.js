@@ -79,10 +79,13 @@ function App() {
             path="/"
             children={<Home user={user} setUser={setUser} />}
           />
-          <Route path="/game" component={Game} />
+          <Route path="/game" children={<Game user={user} />} />
           <Route path="/endgame" component={EndGame} />
           <Route path="/leaderboard" component={LeaderBoard} />
-          <Route path="/signin" component={Signin} />
+          <Route
+            path="/signin"
+            children={<Signin user={user} setUser={setUser} />}
+          />
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>
